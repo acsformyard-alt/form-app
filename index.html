@@ -22,8 +22,17 @@
 
       <section class="controls card">
         <div class="control-group">
-          <label for="imageInput" class="control-label">Select an image</label>
-          <input type="file" id="imageInput" accept="image/*" />
+          <label for="imageInput" class="control-label">Select images to clean</label>
+          <input
+            type="file"
+            id="imageInput"
+            accept="image/*"
+            multiple
+            aria-describedby="imageInputDescription"
+          />
+          <p id="imageInputDescription" class="control-help">
+            Choose one or more image files to process together.
+          </p>
         </div>
 
         <div class="sliders" aria-live="polite">
@@ -57,24 +66,29 @@
       </section>
 
       <section class="previews">
-        <article class="card">
-          <h2>Original</h2>
-          <div class="preview" id="originalPreview">
-            <p class="placeholder">Your uploaded image will appear here.</p>
-          </div>
+        <article class="card gallery-info">
+          <h2>Selected images</h2>
+          <p
+            id="galleryStatus"
+            class="gallery-status"
+            aria-live="polite"
+          >
+            Choose one or more images to begin removing the upper-right text.
+          </p>
+          <p
+            id="batchProgress"
+            class="gallery-progress"
+            role="status"
+            aria-live="polite"
+          ></p>
         </article>
 
-        <article class="card">
-          <h2>Result</h2>
-          <div class="preview" id="resultPreview">
-            <p class="placeholder">
-              After processing, the cleaned image will appear here.
-            </p>
-          </div>
-          <a id="downloadLink" class="download" download="cleaned-image.png"
-            >Download cleaned image</a
-          >
-        </article>
+        <div
+          id="gallery"
+          class="gallery-grid"
+          role="list"
+          aria-live="polite"
+        ></div>
       </section>
     </main>
 
