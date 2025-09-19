@@ -37,6 +37,39 @@ body {
   margin: 0.5rem 0 0;
 }
 
+.status {
+  margin: 0.75rem 0 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.95rem;
+  color: rgba(51, 65, 85, 0.95);
+}
+
+.status::before {
+  content: "";
+}
+
+.status--loading::before {
+  content: "⏳";
+}
+
+.status--ready {
+  color: #047857;
+}
+
+.status--ready::before {
+  content: "✅";
+}
+
+.status--error {
+  color: #b91c1c;
+}
+
+.status--error::before {
+  content: "⚠️";
+}
+
 .card {
   background: var(--card-bg);
   backdrop-filter: blur(10px);

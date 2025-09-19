@@ -15,6 +15,9 @@
           upper-right corner. Adjust the removal area if needed, then download
           the cleaned result.
         </p>
+        <p id="modelStatus" class="status status--loading" role="status">
+          Checking local AI inpainting assets…
+        </p>
       </header>
 
       <section class="controls card">
@@ -76,6 +79,7 @@
     </main>
 
     <canvas id="workCanvas" class="hidden" aria-hidden="true"></canvas>
-    <script src="app.js"></script>
+    <script src="libs/onnxruntime-web/ort.min.js" defer></script>
+    <script src="app.js" defer></script>
   </body>
 </html>
