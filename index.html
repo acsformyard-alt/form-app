@@ -1,99 +1,50 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Image Stripper</title>
-    <link rel="stylesheet" href="styles.css" />
-  </head>
-  <body>
-    <main class="app">
-      <header class="app__header">
-        <h1>Image Stripper</h1>
-        <p>
-          Upload a photo and automatically blend away the text that lives in the
-          upper-right corner. Adjust the removal area if needed, then download
-          the cleaned result.
-        </p>
-        <p id="modelStatus" class="status status--loading" role="status">
-          Checking local AI inpainting assets…
-        </p>
-      </header>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Upper‑Right Text Remover — LaMa INT8 (Local)</title>
+<link rel="stylesheet" href="styles.css" />
+<!-- onnxruntime-web: provides WebGPU + WASM execution -->
+<script src="https://cdn.jsdelivr.net/npm/onnxruntime-web@1.18.0/dist/ort.min.js"></script>
+</head>
+<body>
+<header>
+<h1>Upper‑Right Text Remover (Local, LaMa‑INT8)</h1>
+<p class="muted">No servers. Runs in your browser with WebGPU when available. Processes the upper‑right corner per the fixed prompt.</p>
+</header>
 
-      <section class="controls card">
-        <div class="control-group">
-          <label for="imageInput" class="control-label">Select images to clean</label>
-          <input
-            type="file"
-            id="imageInput"
-            accept="image/*"
-            multiple
-            aria-describedby="imageInputDescription"
-          />
-          <p id="imageInputDescription" class="control-help">
-            Choose one or more image files to process together.
-          </p>
-        </div>
 
-        <div class="sliders" aria-live="polite">
-          <div class="control-group">
-            <label for="widthSlider" class="control-label"
-              >Removal width: <span id="widthValue">20</span>%</label
-            >
-            <input
-              type="range"
-              id="widthSlider"
-              min="5"
-              max="60"
-              value="20"
-            />
-          </div>
-          <div class="control-group">
-            <label for="heightSlider" class="control-label"
-              >Removal height: <span id="heightValue">20</span>%</label
-            >
-            <input
-              type="range"
-              id="heightSlider"
-              min="5"
-              max="60"
-              value="20"
-            />
-          </div>
-        </div>
+<main>
+<section class="controls">
+<label class="btn">
+<input id="fileInput" type="file" accept="image/*" multiple />
+Choose images
+</label>
+<button id="processBtn" class="primary">Process</button>
+<span id="status" class="status"></span>
+</section>
 
-        <button id="processButton" disabled>Remove text</button>
-      </section>
 
-      <section class="previews">
-        <article class="card gallery-info">
-          <h2>Selected images</h2>
-          <p
-            id="galleryStatus"
-            class="gallery-status"
-            aria-live="polite"
-          >
-            Choose one or more images to begin removing the upper-right text.
-          </p>
-          <p
-            id="batchProgress"
-            class="gallery-progress"
-            role="status"
-            aria-live="polite"
-          ></p>
-        </article>
+<section>
+<div id="gallery" class="gallery"></div>
+</section>
+</main>
 
-        <div
-          id="gallery"
-          class="gallery-grid"
-          role="list"
-          aria-live="polite"
-        ></div>
-      </section>
-    </main>
 
-    <canvas id="workCanvas" class="hidden" aria-hidden="true"></canvas>
-    <script src="libs/onnxruntime-web/ort.min.js" defer></script>
-    <script src="app.js" defer></script>
-  </body>
+<script type="module">
+import { initLama, inpaintUpperRightBatch } from './js/lama.js';
+import { uiInit } from './js/app.js';
+(async () => {
+const statusEl = document.getElementById('status');
+statusEl.textContent = 'Loading LaMa model…';
+await initLama({
+modelUrl: './models/lama-int8.onnx',
+prefer: ['webgpu','wasm'],
+});
+statusEl.textContent = 'Ready.';
+uiInit({ inpaintBatch: inpaintUpperRightBatch, statusEl });
+})();
+</script>
+</body>
 </html>
